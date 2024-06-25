@@ -34,6 +34,8 @@ int main(){
 
     imprimirGrafo(grafo);
 
+    funcaoAuxiliar(grafo);
+
     liberarGrafo(grafo);
 
     return 0;

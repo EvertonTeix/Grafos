@@ -35,11 +35,30 @@ Grafo* criarGrafo(int numero_vertice){
     return grafo;
 }
 
-void adicionarAresta(Grafo* grafo, int origem, int destino){
+void adicionarAresta(Grafo* grafo, int origem, int destino) {
+    // Verifica se a aresta já existe na direção origem -> destino
+    No* atual = grafo->lista_adjacencia[origem];
+    while (atual != NULL) {
+        if (atual->vertice == destino) {
+            printf("Aresta de %d para %d já existe.\n", origem, destino);
+            return;
+        }
+        atual = atual->proximo_vertice;
+    }
 
+    // Verifica se a aresta já existe na direção destino -> origem
+    atual = grafo->lista_adjacencia[destino];
+    while (atual != NULL) {
+        if (atual->vertice == origem) {
+            printf("Aresta de %d para %d já existe.\n", destino, origem);
+            return;
+        }
+        atual = atual->proximo_vertice;
+    }
+
+    // Se não existe a aresta em nenhuma das direções, adiciona-a na direção origem -> destino
     No* adjacencia = (No*)malloc(sizeof(No));
-
-    if(adjacencia == NULL){
+    if (adjacencia == NULL) {
         printf("Memoria Insuficiente.");
         exit(1);
     }
@@ -50,22 +69,43 @@ void adicionarAresta(Grafo* grafo, int origem, int destino){
     grafo->lista_adjacencia[origem] = adjacencia;
 }
 
+
 void imprimirGrafo(Grafo* grafo){
 
     int i = 0;
 
     while(i < grafo->num_vertice){
         No* adjacentia_temporaria = grafo->lista_adjacencia[i];
-        printf("Lista de adjacencia do vertice %d: \n", i);
+        printf("O vertice %d faz ligacao com: \n", i);
 
         while (adjacentia_temporaria != NULL){
-            printf("%d -> ", adjacentia_temporaria->vertice);
+            printf("%d, ", adjacentia_temporaria->vertice);
             adjacentia_temporaria = adjacentia_temporaria->proximo_vertice;
         }
 
         printf("NULL \n");
         
         i++;
+    }
+}
+
+void verificarEImprimirTodasBidirecionais(Grafo* grafo) {
+    int numero_vertices = grafo->num_vertice;
+
+    // Verifica para cada par de vértices (i, j) onde i < j
+    for (int i = 0; i < numero_vertices; i++) {
+        No* adjacente_temporario = grafo->lista_adjacencia[i];
+
+        while (adjacente_temporario != NULL) {
+            int j = adjacente_temporario->vertice;
+
+            // Verifica se existe a ligação i -> j
+            if (existeAresta(grafo, i, j)) {
+                printf("Existe a ligacao %d -> %d logo, exite a ligacao %d -> %d\n", i, j, j, i);
+            }
+
+            adjacente_temporario = adjacente_temporario->proximo_vertice;
+        }
     }
 }
 
@@ -86,14 +126,22 @@ void gerarGrafoAleatorio(Grafo* grafo, int numerto_aresta){
     }
 }
 
-int existeAresta(Grafo* grafo, int origem, int destino){
+int existeAresta(Grafo* grafo, int origem, int destino) {
+    // Verifica se existe a aresta de origem para destino
     No* atual = grafo->lista_adjacencia[origem];
-
-    while(atual != NULL){
-        if(atual->vertice == destino){
+    while (atual != NULL) {
+        if (atual->vertice == destino) {
             return 1;
         }
+        atual = atual->proximo_vertice;
+    }
 
+    // Verifica se existe a aresta de destino para origem
+    atual = grafo->lista_adjacencia[destino];
+    while (atual != NULL) {
+        if (atual->vertice == origem) {
+            return 1;
+        }
         atual = atual->proximo_vertice;
     }
 
@@ -102,24 +150,22 @@ int existeAresta(Grafo* grafo, int origem, int destino){
 
 void liberarGrafo(Grafo* grafo) {
     if (grafo == NULL) {
-        return; // Verifica se o grafo é NULL
+        return;
     }
 
-    // Desaloca cada lista de adjacência
     for (int i = 0; i < grafo->num_vertice; i++) {
         No* atual = grafo->lista_adjacencia[i];
         while (atual != NULL) {
             No* proximo = atual->proximo_vertice;
-            free(atual); // Libera o nó atual
+            free(atual);
             atual = proximo;
         }
     }
-
-    // Libera a estrutura do grafo em si
     free(grafo);
 }
 
 int maxArestas(int n) {
     return n * (n - 1) / 2;
 }
+
 
