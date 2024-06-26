@@ -1,6 +1,8 @@
 /*Arquivo de protótipo do tipo grafo.c*/
 
 #define MAX_VERTICES 100
+#define MAX_ARESTAS_RETORNO 500 // Valor inicial de 500 arestas de retorno
+
 
 typedef struct no No;
 typedef struct grafo Grafo;
@@ -22,3 +24,9 @@ void liberarGrafo(Grafo* grafo);
 
 /*Retorna o número máximo de arestas que um grafo com X vértices pode ter*/
 int maxArestas(int n);
+
+// Função para detectar ciclos no grafo
+int verificaCiclo(Grafo* grafo, int v, int pai);
+
+void pegaGrafo(Grafo* grafo);
+

@@ -1,10 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "grafo.h"
 #include <time.h>
+#include "grafo.h"
 
-int main(){
-
+int main() {
     srand(time(NULL));
     int numero_vertices;
     int numero_arestas;
@@ -13,20 +12,16 @@ int main(){
     scanf("%d", &numero_vertices);
 
     int max_arestas = maxArestas(numero_vertices);
-    printf("O numero máximo de arestas para um grafo com %d vertices e %d.\n", numero_vertices, max_arestas);
+    printf("O numero máximo de arestas para um grafo com %d vertices é %d.\n", numero_vertices, max_arestas);
 
-    do{
-
+    do {
         printf("Digite o numero de arestas que vc deseja no seu grafo: ");
         scanf("%d", &numero_arestas);
 
-        if(numero_arestas > max_arestas){
+        if (numero_arestas > max_arestas) {
             printf("Numero de arestas excede o maximo permitido. Tente novamente.\n");
         }
-
-    }while(numero_arestas > max_arestas);
-    
-
+    } while (numero_arestas > max_arestas);
 
     Grafo* grafo = criarGrafo(numero_vertices);
 
@@ -34,8 +29,8 @@ int main(){
 
     imprimirGrafo(grafo);
 
-    funcaoAuxiliar(grafo);
-
+    pegaGrafo(grafo);
+    
     liberarGrafo(grafo);
 
     return 0;
