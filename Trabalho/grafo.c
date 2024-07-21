@@ -14,9 +14,9 @@ struct no
 struct grafo
 {
     int num_vertice;
-    int* visitado;  // Array para marcar os vértices visitados
-    int* na_pilha;  // Array para marcar os vértices na pilha de recursão
-    int* ciclo;      // Array para armazenar os vértices do ciclo
+    int* visitado; 
+    int* na_pilha;  
+    int* ciclo;      
     int ciclo_indice; 
     No *lista_adjacencia[MAX_VERTICES];
 };
@@ -32,24 +32,24 @@ Grafo* criarGrafo(int num_vertice) {
     grafo->visitado = (int*)malloc(num_vertice * sizeof(int));
     if (grafo->visitado == NULL) {
         printf("Erro ao alocar memória para o vetor visitado.\n");
-        free(grafo);  // Libera a memória alocada para o grafo
+        free(grafo);
         exit(1);
     }
 
     grafo->na_pilha = (int*)malloc(num_vertice * sizeof(int));
     if (grafo->na_pilha == NULL) {
         printf("Erro ao alocar memória para o vetor na_pilha.\n");
-        free(grafo->visitado);  // Libera a memória alocada para o vetor visitado
-        free(grafo);  // Libera a memória alocada para o grafo
+        free(grafo->visitado);  
+        free(grafo);
         exit(1);
     }
 
     grafo->ciclo = (int*)malloc(num_vertice * sizeof(int));
     if (grafo->ciclo == NULL) {
         printf("Erro ao alocar memória para o vetor ciclo.\n");
-        free(grafo->na_pilha);  // Libera a memória alocada para o vetor na_pilha
-        free(grafo->visitado);  // Libera a memória alocada para o vetor visitado
-        free(grafo);  // Libera a memória alocada para o grafo
+        free(grafo->na_pilha);
+        free(grafo->visitado);  
+        free(grafo);
         exit(1);
     }
 
@@ -74,7 +74,7 @@ void adicionarAresta(Grafo *grafo, int origem, int destino)
         return;
     }
 
-    // Verifica se a aresta já existe na direção destino -> origem (para grafos não dirigidos)
+    // Verifica se a aresta já existe na direção destino -> origem
     if (existeAresta(grafo, destino, origem))
     {
         return;
@@ -91,7 +91,7 @@ void adicionarAresta(Grafo *grafo, int origem, int destino)
     novo_no->proximo_vertice = grafo->lista_adjacencia[origem];
     grafo->lista_adjacencia[origem] = novo_no;
 
-    // Adiciona a aresta destino -> origem (para grafos não dirigidos)
+    // Adiciona a aresta destino -> origem
     novo_no = (No *)malloc(sizeof(No));
     if (novo_no == NULL)
     {
@@ -216,7 +216,7 @@ void pegaGrafo(Grafo* grafo) {
     for (int i = 0; i < grafo->num_vertice; i++) {
         grafo->visitado[i] = 0;
         grafo->na_pilha[i] = 0;
-        grafo->ciclo[i] = -1;  // Inicializa o vetor ciclo com -1 (indicando vazio)
+        grafo->ciclo[i] = -1;
     }
     grafo->ciclo_indice = 0;
 
