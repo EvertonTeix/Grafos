@@ -17,7 +17,7 @@ struct grafo
     int* visitado;  // Array para marcar os vértices visitados
     int* na_pilha;  // Array para marcar os vértices na pilha de recursão
     int* ciclo;      // Array para armazenar os vértices do ciclo
-    int ciclo_indice; // Índice para controlar a posição no vetor ciclo
+    int ciclo_indice; 
     No *lista_adjacencia[MAX_VERTICES];
 };
 
@@ -125,15 +125,14 @@ void imprimirGrafo(Grafo *grafo)
 {
     for (int i = 0; i < grafo->num_vertice; i++)
     {
-        No *adjacentia_temporaria = grafo->lista_adjacencia[i];
+        No *adjacencia_temporaria = grafo->lista_adjacencia[i];
         printf("O vertice %d faz ligacao com: \n", i);
 
-        while (adjacentia_temporaria != NULL)
+        while (adjacencia_temporaria != NULL)
         {
-            printf("%d, ", adjacentia_temporaria->vertice);
-            adjacentia_temporaria = adjacentia_temporaria->proximo_vertice;
+            printf("%d, ", adjacencia_temporaria->vertice);
+            adjacencia_temporaria = adjacencia_temporaria->proximo_vertice;
         }
-        printf("NULL \n");
     }
 }
 
@@ -168,24 +167,27 @@ void liberarGrafo(Grafo *grafo)
             atual = proximo;
         }
     }
+    free(grafo->ciclo);
+    free(grafo->na_pilha);
+    free(grafo->visitado);
     free(grafo);
 }
+
 
 int maxArestas(int n)
 {
     return n * (n - 1) / 2;
 }
 
-// Função para detectar ciclos no grafo
 int verificaCiclo(Grafo* grafo, int v, int pai) {
-    // Marca o vértice atual como visitado e coloca na pilha de recursão
+
     grafo->visitado[v] = 1;
     grafo->na_pilha[v] = 1;
 
-    // Adiciona o vértice atual ao vetor ciclo
+
     grafo->ciclo[grafo->ciclo_indice++] = v;
 
-    // Percorre todos os vértices adjacentes
+
     No* atual = grafo->lista_adjacencia[v];
     while (atual != NULL) {
         int adj = atual->vertice;
