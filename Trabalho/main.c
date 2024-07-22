@@ -12,7 +12,7 @@ int main() {
     scanf("%d", &numero_vertices);
 
     int max_arestas = maxArestas(numero_vertices);
-    printf("O numero máximo de arestas para um grafo com %d vertices é %d.\n", numero_vertices, max_arestas);
+    printf("O numero maximo de arestas para um grafo com %d vertices e %d.\n", numero_vertices, max_arestas);
 
     do {
         printf("Digite o numero de arestas que vc deseja no seu grafo: ");

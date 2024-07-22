@@ -14,48 +14,54 @@ struct no
 struct grafo
 {
     int num_vertice;
-    int* visitado; 
-    int* na_pilha;  
-    int* ciclo;      
-    int ciclo_indice; 
+    int *visitado;
+    int *na_pilha;
+    int *ciclo;
+    int ciclo_indice;
     No *lista_adjacencia[MAX_VERTICES];
 };
 
-Grafo* criarGrafo(int num_vertice) {
-    Grafo* grafo = (Grafo*)malloc(sizeof(Grafo));
-    if (grafo == NULL) {
+Grafo *criarGrafo(int num_vertice)
+{
+    Grafo *grafo = (Grafo *)malloc(sizeof(Grafo));
+    if (grafo == NULL)
+    {
         printf("Erro ao alocar memória para o grafo.\n");
         exit(1);
     }
 
     grafo->num_vertice = num_vertice;
-    grafo->visitado = (int*)malloc(num_vertice * sizeof(int));
-    if (grafo->visitado == NULL) {
+    grafo->visitado = (int *)malloc(num_vertice * sizeof(int));
+    if (grafo->visitado == NULL)
+    {
         printf("Erro ao alocar memória para o vetor visitado.\n");
         free(grafo);
         exit(1);
     }
 
-    grafo->na_pilha = (int*)malloc(num_vertice * sizeof(int));
-    if (grafo->na_pilha == NULL) {
+    grafo->na_pilha = (int *)malloc(num_vertice * sizeof(int));
+    if (grafo->na_pilha == NULL)
+    {
         printf("Erro ao alocar memória para o vetor na_pilha.\n");
-        free(grafo->visitado);  
+        free(grafo->visitado);
         free(grafo);
         exit(1);
     }
 
-    grafo->ciclo = (int*)malloc(num_vertice * sizeof(int));
-    if (grafo->ciclo == NULL) {
+    grafo->ciclo = (int *)malloc(num_vertice * sizeof(int));
+    if (grafo->ciclo == NULL)
+    {
         printf("Erro ao alocar memória para o vetor ciclo.\n");
         free(grafo->na_pilha);
-        free(grafo->visitado);  
+        free(grafo->visitado);
         free(grafo);
         exit(1);
     }
 
     grafo->ciclo_indice = 0;
 
-    for (int i = 0; i < num_vertice; i++) {
+    for (int i = 0; i < num_vertice; i++)
+    {
         grafo->lista_adjacencia[i] = NULL;
         grafo->visitado[i] = 0;
         grafo->na_pilha[i] = 0;
@@ -64,7 +70,6 @@ Grafo* criarGrafo(int num_vertice) {
 
     return grafo;
 }
-
 
 void adicionarAresta(Grafo *grafo, int origem, int destino)
 {
@@ -103,18 +108,20 @@ void adicionarAresta(Grafo *grafo, int origem, int destino)
     grafo->lista_adjacencia[destino] = novo_no;
 }
 
-
-void gerarGrafoAleatorio(Grafo* grafo, int numerto_aresta){
+void gerarGrafoAleatorio(Grafo *grafo, int numerto_aresta)
+{
 
     int numero_vertice = grafo->num_vertice;
     int arestas_adicionadas = 0;
 
-    while (arestas_adicionadas < numerto_aresta){
+    while (arestas_adicionadas < numerto_aresta)
+    {
 
         int origem = rand() % numero_vertice;
         int destino = rand() % numero_vertice;
 
-        if(origem != destino && !existeAresta(grafo, origem, destino)){
+        if (origem != destino && !existeAresta(grafo, origem, destino))
+        {
             adicionarAresta(grafo, origem, destino);
             arestas_adicionadas++;
         }
@@ -126,10 +133,14 @@ void imprimirGrafo(Grafo *grafo)
     for (int i = 0; i < grafo->num_vertice; i++)
     {
         No *adjacencia_temporaria = grafo->lista_adjacencia[i];
-        printf("O vertice %d faz ligacao com: \n", i);
+        printf("\nO vertice %d faz ligacao com: \n", i);
 
         while (adjacencia_temporaria != NULL)
         {
+            if (adjacencia_temporaria->proximo_vertice == NULL)
+            {
+                break;
+            }
             printf("%d, ", adjacencia_temporaria->vertice);
             adjacencia_temporaria = adjacencia_temporaria->proximo_vertice;
         }
@@ -173,33 +184,36 @@ void liberarGrafo(Grafo *grafo)
     free(grafo);
 }
 
-
 int maxArestas(int n)
 {
     return n * (n - 1) / 2;
 }
 
-int verificaCiclo(Grafo* grafo, int v, int pai) {
+int verificaCiclo(Grafo *grafo, int v, int pai)
+{
 
     grafo->visitado[v] = 1;
     grafo->na_pilha[v] = 1;
 
-
     grafo->ciclo[grafo->ciclo_indice++] = v;
 
-
-    No* atual = grafo->lista_adjacencia[v];
-    while (atual != NULL) {
+    No *atual = grafo->lista_adjacencia[v];
+    while (atual != NULL)
+    {
         int adj = atual->vertice;
 
         // Se o vértice adjacente não foi visitado, faz uma chamada recursiva
-        if (!grafo->visitado[adj]) {
-            if (verificaCiclo(grafo, adj, v)) {
-                return 1;  // Se um ciclo é encontrado
+        if (!grafo->visitado[adj])
+        {
+            if (verificaCiclo(grafo, adj, v))
+            {
+                return 1; // Se um ciclo é encontrado
             }
-        } else if (adj != pai) {
+        }
+        else if (adj != pai)
+        {
             // Se o vértice adjacente está na pilha e não é o pai, um ciclo é encontrado
-            grafo->ciclo[grafo->ciclo_indice++] = adj;  // Adiciona o vértice adjacente para fechar o ciclo
+            grafo->ciclo[grafo->ciclo_indice++] = adj; // Adiciona o vértice adjacente para fechar o ciclo
             return 1;
         }
 
@@ -212,31 +226,39 @@ int verificaCiclo(Grafo* grafo, int v, int pai) {
     return 0;
 }
 
-void pegaGrafo(Grafo* grafo) {
-    for (int i = 0; i < grafo->num_vertice; i++) {
+void pegaGrafo(Grafo *grafo)
+{
+    for (int i = 0; i < grafo->num_vertice; i++)
+    {
         grafo->visitado[i] = 0;
         grafo->na_pilha[i] = 0;
         grafo->ciclo[i] = -1;
     }
     grafo->ciclo_indice = 0;
 
-    for (int i = 0; i < grafo->num_vertice; i++) {
-        if (!grafo->visitado[i]) {
-            if (verificaCiclo(grafo, i, -1)) {
-                printf("Ciclo encontrado: ");
+    for (int i = 0; i < grafo->num_vertice; i++)
+    {
+        if (!grafo->visitado[i])
+        {
+            if (verificaCiclo(grafo, i, -1))
+            {
+                printf("\n\nCICLO ENCONTRADO: ");
                 int ciclo_inicio = grafo->ciclo[grafo->ciclo_indice - 1];
                 int j = 0;
-                for (; j < grafo->ciclo_indice; j++) {
-                    if (grafo->ciclo[j] == ciclo_inicio) {
+                for (; j < grafo->ciclo_indice; j++)
+                {
+                    if (grafo->ciclo[j] == ciclo_inicio)
+                    {
                         break;
                     }
                 }
-                for (; j < grafo->ciclo_indice; j++) {
+                for (; j < grafo->ciclo_indice; j++)
+                {
                     printf("%d ", grafo->ciclo[j]);
                 }
                 return;
             }
         }
     }
-    printf("Nenhum ciclo encontrado.\n");
+    printf("\n\nCICLO NÃO ENCONTRADO.\n");
 }
